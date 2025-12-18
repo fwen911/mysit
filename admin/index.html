@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>后台管理 - 主页面</title>
+    <style>
+        /* 全局样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            background-color: #f5f7fa;
+            color: #333;
+        }
+        
+        /* 头部样式 */
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header h1 {
+            font-size: 1.8rem;
+        }
+        
+        .logout-btn {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+        
+        .logout-btn:hover {
+            background-color: white;
+            color: #667eea;
+        }
+        
+        /* 主容器 */
+        .main-container {
+            display: flex;
+            min-height: calc(100vh - 80px);
+        }
+        
+        /* 侧边导航 */
+        .sidebar {
+            width: 250px;
+            background-color: white;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+            padding: 30px 0;
+        }
+        
+        .sidebar ul {
+            list-style: none;
+        }
+        
+        .sidebar li {
+            margin-bottom: 10px;
+        }
+        
+        .sidebar a {
+            display: block;
+            padding: 15px 30px;
+            color: #666;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+        
+        .sidebar a:hover, .sidebar a.active {
+            background-color: #667eea;
+            color: white;
+        }
+        
+        /* 内容区域 */
+        .content {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+        }
+        
+        /* 模块样式 */
+        .module {
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .module h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+        
+        /* 表单样式 */
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: bold;
+        }
+        
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        /* 按钮样式 */
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .btn-primary {
+            background-color: #667eea;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #5a6fd8;
+            transform: translateY(-2px);
+        }
+        
+        .btn-success {
+            background-color: #4caf50;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background-color: #43a047;
+            transform: translateY(-2px);
+        }
+        
+        .btn-danger {
+            background-color: #f44336;
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background-color: #e53935;
+            transform: translateY(-2px);
+        }
+        
+        /* 图片上传样式 */
+        .image-upload {
+            border: 2px dashed #e0e0e0;
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 20px 0;
+        }
+        
+        .image-upload:hover {
+            border-color: #667eea;
+            background-color: rgba(102, 126, 234, 0.05);
+        }
+        
+        .image-upload input {
+            display: none;
+        }
+        
+        .image-preview {
+            max-width: 200px;
+            max-height: 200px;
+            margin: 10px auto;
+            display: block;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* 列表样式 */
+        .item-list {
+            margin-top: 20px;
+        }
+        
+        .item {
+            background-color: #f5f7fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+        
+        .item:hover {
+            background-color: #e8ecf4;
+            transform: translateY(-2px);
+        }
+        
+        .item-content {
+            flex: 1;
+        }
+        
+        .item h3 {
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+        
+        .item p {
+            color: #666;
+            margin-bottom: 10px;
+        }
+        
+        .item-image {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-right: 20px;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .main-container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                padding: 10px 0;
+            }
+            
+            .sidebar ul {
+                display: flex;
+                overflow-x: auto;
+            }
+            
+            .sidebar li {
+                margin-bottom: 0;
+            }
+            
+            .sidebar a {
+                padding: 10px 15px;
+                white-space: nowrap;
+            }
+            
+            .content {
+                padding: 15px;
+            }
+            
+            .module {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 头部 -->
+    <header class="header">
+        <h1>个人主页管理系统</h1>
+        <button class="logout-btn" onclick="logout()">退出登录</button>
+    </header>
+    
+    <!-- 主容器 -->
+    <div class="main-container">
+        <!-- 侧边导航 -->
+        <aside class="sidebar">
+            <ul>
+                <li><a href="#profile" class="active">个人信息管理</a></li>
+                <li><a href="#movies">电影管理</a></li>
+                <li><a href="#reading">阅读管理</a></li>
+                <li><a href="#photography">摄影管理</a></li>
+                <li><a href="#sports">运动管理</a></li>
+                <li><a href="#heartbeat">心动时刻管理</a></li>
+                <li><a href="#learning">学习日志管理</a></li>
+            </ul>
+        </aside>
+        
+        <!-- 内容区域 -->
+        <main class="content">
+            <!-- 个人信息管理 -->
+            <section id="profile" class="module">
+                <h2>个人信息管理</h2>
+                <form id="profileForm">
+                    <div class="form-group">
+                        <label for="name">姓名</label>
+                        <input type="text" id="name" name="name" placeholder="请输入姓名" value="文菲">
+                    </div>
+                    <div class="form-group">
+                        <label for="school">学校</label>
+                        <input type="text" id="school" name="school" placeholder="请输入学校" value="武汉理工大学">
+                    </div>
+                    <div class="form-group">
+                        <label for="major">专业</label>
+                        <input type="text" id="major" name="major" placeholder="请输入专业" value="智能经济专业">
+                    </div>
+                    <div class="form-group">
+                        <label for="contact">联系邮箱</label>
+                        <input type="email" id="contact" name="contact" placeholder="请输入联系邮箱" value="911804361@qq.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="introduction">个人介绍</label>
+                        <textarea id="introduction" name="introduction" placeholder="请输入个人介绍...">我是文菲，就读于武汉理工大学智能经济专业。我的兴趣爱好有很多，来到这个世界的19年来也经历了许许多多令人难以忘却的事。在这个页面中，我想藏好我的学习零碎、生活片段与心跳的节奏，比起冰冷的代码，我更喜欢赋予它一点温度，也习惯在喧嚣中找到属于自己的安静角落……</textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">保存个人信息</button>
+                </form>
+            </section>
+            
+            <!-- 电影管理 -->
+            <section id="movies" class="module">
+                <h2>电影管理</h2>
+                <form id="movieForm">
+                    <div class="form-group">
+                        <label for="movieTitle">电影名称</label>
+                        <input type="text" id="movieTitle" name="movieTitle" placeholder="请输入电影名称">
+                    </div>
+                    <div class="form-group">
+                        <label for="movieDescription">电影描述</label>
+                        <textarea id="movieDescription" name="movieDescription" placeholder="请输入电影描述..."></textarea>
+                    </div>
+                    <div class="image-upload">
+                        <input type="file" id="movieImage" name="movieImage" accept="image/*" onchange="previewImage(this, 'moviePreview')">
+                        <label for="movieImage">
+                            <strong>点击上传电影封面</strong>
+                            <p>支持 JPG、PNG 格式，大小不超过 2MB</p>
+                        </label>
+                        <img id="moviePreview" class="image-preview" style="display: none;">
+                    </div>
+                    <button type="submit" class="btn btn-primary">添加电影</button>
+                </form>
+                
+                <!-- 电影列表 -->
+                <div class="item-list">
+                    <h3>电影列表</h3>
+                    <div id="movieList"></div>
+                </div>
+            </section>
+            
+            <!-- 阅读管理 -->
+            <section id="reading" class="module">
+                <h2>阅读管理</h2>
+                <form id="readingForm">
+                    <div class="form-group">
+                        <label for="readingTitle">书籍名称</label>
+                        <input type="text" id="readingTitle" name="readingTitle" placeholder="请输入书籍名称">
+                    </div>
+                    <div class="form-group">
+                        <label for="readingDescription">书籍描述</label>
+                        <textarea id="readingDescription" name="readingDescription" placeholder="请输入书籍描述..."></textarea>
+                    </div>
+                    <div class="image-upload">
+                        <input type="file" id="readingImage" name="readingImage" accept="image/*" onchange="previewImage(this, 'readingPreview')">
+                        <label for="readingImage">
+                            <strong>点击上传书籍封面</strong>
+                            <p>支持 JPG、PNG 格式，大小不超过 2MB</p>
+                        </label>
+                        <img id="readingPreview" class="image-preview" style="display: none;">
+                    </div>
+                    <button type="submit" class="btn btn-primary">添加书籍</button>
+                </form>
+                
+                <!-- 阅读列表 -->
+                <div class="item-list">
+                    <h3>书籍列表</h3>
+                    <div id="readingList"></div>
+                </div>
+            </section>
+            
+            <!-- 摄影管理 -->
+            <section id="photography" class="module">
+                <h2>摄影管理</h2>
+                <form id="photographyForm">
+                    <div class="form-group">
+                        <label for="photographyTitle">作品名称</label>
+                        <input type="text" id="photographyTitle" name="photographyTitle" placeholder="请输入作品名称">
+                    </div>
+                    <div class="form-group">
+                        <label for="photographyDescription">作品描述</label>
+                        <textarea id="photographyDescription" name="photographyDescription" placeholder="请输入作品描述..."></textarea>
+                    </div>
+                    <div class="image-upload">
+                        <input type="file" id="photographyImage" name="photographyImage" accept="image/*" onchange="previewImage(this, 'photographyPreview')">
+                        <label for="photographyImage">
+                            <strong>点击上传摄影作品</strong>
+                            <p>支持 JPG、PNG 格式，大小不超过 2MB</p>
+                        </label>
+                        <img id="photographyPreview" class="image-preview" style="display: none;">
+                    </div>
+                    <button type="submit" class="btn btn-primary">添加摄影作品</button>
+                </form>
+                
+                <!-- 摄影作品列表 -->
+                <div class="item-list">
+                    <h3>摄影作品列表</h3>
+                    <div id="photographyList"></div>
+                </div>
+            </section>
+            
+            <!-- 运动管理 -->
+            <section id="sports" class="module">
+                <h2>运动管理</h2>
+                <form id="sportsForm">
+                    <div class="form-group">
+                        <label for="sportsTitle">运动名称</label>
+                        <input type="text" id="sportsTitle" name="sportsTitle" placeholder="请输入运动名称">
+                    </div>
+                    <div class="form-group">
+                        <label for="sportsDescription">运动描述</label>
+                        <textarea id="sportsDescription" name="sportsDescription" placeholder="请输入运动描述..."></textarea>
+                    </div>
+                    <div class="image-upload">
+                        <input type="file" id="sportsImage" name="sportsImage" accept="image/*" onchange="previewImage(this, 'sportsPreview')">
+                        <label for="sportsImage">
+                            <strong>点击上传运动图片</strong>
+                            <p>支持 JPG、PNG 格式，大小不超过 2MB</p>
+                        </label>
+                        <img id="sportsPreview" class="image-preview" style="display: none;">
+                    </div>
+                    <button type="submit" class="btn btn-primary">添加运动</button>
+                </form>
+                
+                <!-- 运动列表 -->
+                <div class="item-list">
+                    <h3>运动列表</h3>
+                    <div id="sportsList"></div>
+                </div>
+            </section>
+            
+            <!-- 心动时刻管理 -->
+            <section id="heartbeat" class="module">
+                <h2>心动时刻管理</h2>
+                <form id="heartbeatForm">
+                    <div class="form-group">
+                        <label for="heartbeatTitle">时刻名称</label>
+                        <input type="text" id="heartbeatTitle" name="heartbeatTitle" placeholder="请输入时刻名称">
+                    </div>
+                    <div class="form-group">
+                        <label for="heartbeatDescription">时刻描述</label>
+                        <textarea id="heartbeatDescription" name="heartbeatDescription" placeholder="请输入时刻描述..."></textarea>
+                    </div>
+                    <div class="image-upload">
+                        <input type="file" id="heartbeatImage" name="heartbeatImage" accept="image/*" onchange="previewImage(this, 'heartbeatPreview')">
+                        <label for="heartbeatImage">
+                            <strong>点击上传心动时刻图片</strong>
+                            <p>支持 JPG、PNG 格式，大小不超过 2MB</p>
+                        </label>
+                        <img id="heartbeatPreview" class="image-preview" style="display: none;">
+                    </div>
+                    <button type="submit" class="btn btn-primary">添加心动时刻</button>
+                </form>
+                
+                <!-- 心动时刻列表 -->
+                <div class="item-list">
+                    <h3>心动时刻列表</h3>
+                    <div id="heartbeatList"></div>
+                </div>
+            </section>
+            
+            <section id="learning" class="module">
+                <h2>学习日志管理</h2>
+                <p>学习日志管理功能正在开发中...</p>
+            </section>
+        </main>
+    </div>
+    
+    <script>
+        // 页面加载时检查登录状态并加载数据
+        window.onload = function() {
+            checkLogin();
+            loadProfileForm();
+            displayMovies();
+            displayReadings();
+            displayPhotographs();
+            displaySports();
+            displayHeartbeats();
+        };
+        
+        // 从localStorage加载数据到表单
+        function loadProfileForm() {
+            const profileData = localStorage.getItem('profileData');
+            if (profileData) {
+                const data = JSON.parse(profileData);
+                // 更新表单内容
+                if (data.name) document.getElementById('name').value = data.name;
+                if (data.school) document.getElementById('school').value = data.school;
+                if (data.major) document.getElementById('major').value = data.major;
+                if (data.contact) document.getElementById('contact').value = data.contact;
+                if (data.introduction) document.getElementById('introduction').value = data.introduction;
+            }
+        };
+        
+        // 检查登录状态
+        function checkLogin() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            if (!isLoggedIn) {
+                window.location.href = 'login.html';
+            }
+        }
+        
+        // 退出登录
+        function logout() {
+            localStorage.removeItem('isLoggedIn');
+            window.location.href = 'login.html';
+        }
+        
+        // 图片预览功能
+        function previewImage(input, previewId) {
+            const preview = document.getElementById(previewId);
+            const file = input.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+        
+        // 导航切换
+        document.querySelectorAll('.sidebar a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // 移除所有active类
+                document.querySelectorAll('.sidebar a').forEach(item => {
+                    item.classList.remove('active');
+                });
+                
+                // 添加active类到当前点击的链接
+                this.classList.add('active');
+                
+                // 滚动到对应的模块
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+        
+        // 个人信息表单提交
+        document.getElementById('profileForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            // 保存个人信息到localStorage
+            const profileData = {
+                name: document.getElementById('name').value,
+                school: document.getElementById('school').value,
+                major: document.getElementById('major').value,
+                contact: document.getElementById('contact').value,
+                introduction: document.getElementById('introduction').value
+            };
+            localStorage.setItem('profileData', JSON.stringify(profileData));
+            alert('个人信息保存成功！');
+        });
+        
+        // 电影表单提交
+        document.getElementById('movieForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const previewImg = document.getElementById('moviePreview');
+            
+            // 保存电影到localStorage
+            const movieData = {
+                id: Date.now(),
+                title: document.getElementById('movieTitle').value,
+                description: document.getElementById('movieDescription').value,
+                image: previewImg.style.display === 'block' ? previewImg.src : '../img/movie1.jpg'
+            };
+            
+            let movies = [];
+            try {
+                movies = JSON.parse(localStorage.getItem('movies')) || [];
+            } catch (error) {
+                console.error('解析电影数据失败:', error);
+                movies = [];
+            }
+            movies.push(movieData);
+            localStorage.setItem('movies', JSON.stringify(movies));
+            alert('电影添加成功！');
+            this.reset();
+            previewImg.style.display = 'none';
+            displayMovies();
+        });
+        
+        // 动态显示电影列表
+        function displayMovies() {
+            let movies = [];
+            try {
+                movies = JSON.parse(localStorage.getItem('movies')) || [];
+            } catch (error) {
+                console.error('解析电影数据失败:', error);
+                movies = [];
+            }
+            const movieList = document.getElementById('movieList');
+            
+            if (movies.length === 0) {
+                movieList.innerHTML = '<p style="text-align: center; color: #999;">暂无电影数据</p>';
+                return;
+            }
+            
+            movieList.innerHTML = '';
+            movies.forEach(movie => {
+                const movieItem = document.createElement('div');
+                movieItem.className = 'item';
+                movieItem.innerHTML = `
+                    <div style="display: flex; align-items: center;">
+                        <img src="${movie.image}" alt="${movie.title}" class="item-image">
+                        <div class="item-content">
+                            <h3>${movie.title}</h3>
+                            <p>${movie.description}</p>
+                        </div>
+                    </div>
+                    <div>
+                        <button class="btn btn-primary" onclick="editMovie(${movie.id})">编辑</button>
+                        <button class="btn btn-danger" onclick="deleteMovie(${movie.id})">删除</button>
+                    </div>
+                `;
+                movieList.appendChild(movieItem);
+            });
+        }
+        
+        // 编辑电影
+        function editMovie(id) {
+            const movies = JSON.parse(localStorage.getItem('movies')) || [];
+            const movie = movies.find(m => m.id === id);
+            if (movie) {
+                // 填充表单
+                document.getElementById('movieTitle').value = movie.title;
+                document.getElementById('movieDescription').value = movie.description;
+                if (movie.image) {
+                    const previewImg = document.getElementById('moviePreview');
+                    previewImg.src = movie.image;
+                    previewImg.style.display = 'block';
+                }
+                // 删除原有数据
+                deleteMovie(id);
+            }
+        }
+        
+        // 删除电影
+        function deleteMovie(id) {
+            let movies = JSON.parse(localStorage.getItem('movies')) || [];
+            movies = movies.filter(m => m.id !== id);
+            localStorage.setItem('movies', JSON.stringify(movies));
+            displayMovies();
+        }
+        
+        // 阅读表单提交
+        document.getElementById('readingForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const previewImg = document.getElementById('readingPreview');
+            
+            // 保存书籍到localStorage
+            const readingData = {
+                id: Date.now(),
+                title: document.getElementById('readingTitle').value,
+                description: document.getElementById('readingDescription').value,
+                image: previewImg.style.display === 'block' ? previewImg.src : '../img/book1.jpg'
+            };
+            
+            let readings = [];
+            try {
+                readings = JSON.parse(localStorage.getItem('readings')) || [];
+            } catch (error) {
+                console.error('解析阅读数据失败:', error);
+                readings = [];
+            }
+            readings.push(readingData);
+            localStorage.setItem('readings', JSON.stringify(readings));
+            alert('书籍添加成功！');
+            this.reset();
+            previewImg.style.display = 'none';
+            displayReadings();
+        });
+        
+        // 动态显示阅读列表
+        function displayReadings() {
+            let readings = [];
+            try {
+                readings = JSON.parse(localStorage.getItem('readings')) || [];
+            } catch (error) {
+                console.error('解析阅读数据失败:', error);
+                readings = [];
+            }
+            const readingList = document.getElementById('readingList');
+            
+            if (readings.length === 0) {
+                readingList.innerHTML = '<p style="text-align: center; color: #999;">暂无书籍数据</p>';
+                return;
+            }
+            
+            readingList.innerHTML = '';
+            readings.forEach(reading => {
+                const readingItem = document.createElement('div');
+                readingItem.className = 'item';
+                readingItem.innerHTML = `
+                    <div style="display: flex; align-items: center;">
+                        <img src="${reading.image}" alt="${reading.title}" class="item-image">
+                        <div class="item-content">
+                            <h3>${reading.title}</h3>
+                            <p>${reading.description}</p>
+                        </div>
+                    </div>
+                    <div>
+                        <button class="btn btn-primary" onclick="editReading(${reading.id})">编辑</button>
+                        <button class="btn btn-danger" onclick="deleteReading(${reading.id})">删除</button>
+                    </div>
+                `;
+                readingList.appendChild(readingItem);
+            });
+        }
+        
+        // 编辑阅读
+        function editReading(id) {
+            const readings = JSON.parse(localStorage.getItem('readings')) || [];
+            const reading = readings.find(r => r.id === id);
+            if (reading) {
+                document.getElementById('readingTitle').value = reading.title;
+                document.getElementById('readingDescription').value = reading.description;
+                if (reading.image) {
+                    const previewImg = document.getElementById('readingPreview');
+                    previewImg.src = reading.image;
+                    previewImg.style.display = 'block';
+                }
+                deleteReading(id);
+            }
+        }
+        
+        // 删除阅读
+        function deleteReading(id) {
+            let readings = JSON.parse(localStorage.getItem('readings')) || [];
+            readings = readings.filter(r => r.id !== id);
+            localStorage.setItem('readings', JSON.stringify(readings));
+            displayReadings();
+        }
+        
+        // 摄影表单提交
+        document.getElementById('photographyForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const previewImg = document.getElementById('photographyPreview');
+            
+            // 保存摄影作品到localStorage
+            const photographyData = {
+                id: Date.now(),
+                title: document.getElementById('photographyTitle').value,
+                description: document.getElementById('photographyDescription').value,
+                image: previewImg.style.display === 'block' ? previewImg.src : '../img/photo1.jpg'
+            };
+            
+            let photographs = [];
+            try {
+                photographs = JSON.parse(localStorage.getItem('photographs')) || [];
+            } catch (error) {
+                console.error('解析摄影数据失败:', error);
+                photographs = [];
+            }
+            photographs.push(photographyData);
+            localStorage.setItem('photographs', JSON.stringify(photographs));
+            alert('摄影作品添加成功！');
+            this.reset();
+            previewImg.style.display = 'none';
+            displayPhotographs();
+        });
+        
+        // 动态显示摄影列表
+        function displayPhotographs() {
+            let photographs = [];
+            try {
+                photographs = JSON.parse(localStorage.getItem('photographs')) || [];
+            } catch (error) {
+                console.error('解析摄影数据失败:', error);
+                photographs = [];
+            }
+            const photographyList = document.getElementById('photographyList');
+            
+            if (photographs.length === 0) {
+                photographyList.innerHTML = '<p style="text-align: center; color: #999;">暂无摄影作品数据</p>';
+                return;
+            }
+            
+            photographyList.innerHTML = '';
+            photographs.forEach(photograph => {
+                const photographyItem = document.createElement('div');
+                photographyItem.className = 'item';
+                photographyItem.innerHTML = `
+                    <div style="display: flex; align-items: center;">
+                        <img src="${photograph.image}" alt="${photograph.title}" class="item-image">
+                        <div class="item-content">
+                            <h3>${photograph.title}</h3>
+                            <p>${photograph.description}</p>
+                        </div>
+                    </div>
+                    <div>
+                        <button class="btn btn-primary" onclick="editPhotograph(${photograph.id})">编辑</button>
+                        <button class="btn btn-danger" onclick="deletePhotograph(${photograph.id})">删除</button>
+                    </div>
+                `;
+                photographyList.appendChild(photographyItem);
+            });
+        }
+        
+        // 编辑摄影
+        function editPhotograph(id) {
+            const photographs = JSON.parse(localStorage.getItem('photographs')) || [];
+            const photograph = photographs.find(p => p.id === id);
+            if (photograph) {
+                document.getElementById('photographyTitle').value = photograph.title;
+                document.getElementById('photographyDescription').value = photograph.description;
+                if (photograph.image) {
+                    const previewImg = document.getElementById('photographyPreview');
+                    previewImg.src = photograph.image;
+                    previewImg.style.display = 'block';
+                }
+                deletePhotograph(id);
+            }
+        }
+        
+        // 删除摄影
+        function deletePhotograph(id) {
+            let photographs = JSON.parse(localStorage.getItem('photographs')) || [];
+            photographs = photographs.filter(p => p.id !== id);
+            localStorage.setItem('photographs', JSON.stringify(photographs));
+            displayPhotographs();
+        }
+        
+        // 运动表单提交
+        document.getElementById('sportsForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const previewImg = document.getElementById('sportsPreview');
+            
+            // 保存运动到localStorage
+            const sportsData = {
+                id: Date.now(),
+                title: document.getElementById('sportsTitle').value,
+                description: document.getElementById('sportsDescription').value,
+                image: previewImg.style.display === 'block' ? previewImg.src : '../img/sport1.jpg'
+            };
+            
+            let sports = [];
+            try {
+                sports = JSON.parse(localStorage.getItem('sports')) || [];
+            } catch (error) {
+                console.error('解析运动数据失败:', error);
+                sports = [];
+            }
+            sports.push(sportsData);
+            localStorage.setItem('sports', JSON.stringify(sports));
+            alert('运动添加成功！');
+            this.reset();
+            previewImg.style.display = 'none';
+            displaySports();
+        });
+        
+        // 动态显示运动列表
+        function displaySports() {
+            let sports = [];
+            try {
+                sports = JSON.parse(localStorage.getItem('sports')) || [];
+            } catch (error) {
+                console.error('解析运动数据失败:', error);
+                sports = [];
+            }
+            const sportsList = document.getElementById('sportsList');
+            
+            if (sports.length === 0) {
+                sportsList.innerHTML = '<p style="text-align: center; color: #999;">暂无运动数据</p>';
+                return;
+            }
+            
+            sportsList.innerHTML = '';
+            sports.forEach(sport => {
+                const sportItem = document.createElement('div');
+                sportItem.className = 'item';
+                sportItem.innerHTML = `
+                    <div style="display: flex; align-items: center;">
+                        <img src="${sport.image}" alt="${sport.title}" class="item-image">
+                        <div class="item-content">
+                            <h3>${sport.title}</h3>
+                            <p>${sport.description}</p>
+                        </div>
+                    </div>
+                    <div>
+                        <button class="btn btn-primary" onclick="editSport(${sport.id})">编辑</button>
+                        <button class="btn btn-danger" onclick="deleteSport(${sport.id})">删除</button>
+                    </div>
+                `;
+                sportsList.appendChild(sportItem);
+            });
+        }
+        
+        // 编辑运动
+        function editSport(id) {
+            const sports = JSON.parse(localStorage.getItem('sports')) || [];
+            const sport = sports.find(s => s.id === id);
+            if (sport) {
+                document.getElementById('sportsTitle').value = sport.title;
+                document.getElementById('sportsDescription').value = sport.description;
+                if (sport.image) {
+                    const previewImg = document.getElementById('sportsPreview');
+                    previewImg.src = sport.image;
+                    previewImg.style.display = 'block';
+                }
+                deleteSport(id);
+            }
+        }
+        
+        // 删除运动
+        function deleteSport(id) {
+            let sports = JSON.parse(localStorage.getItem('sports')) || [];
+            sports = sports.filter(s => s.id !== id);
+            localStorage.setItem('sports', JSON.stringify(sports));
+            displaySports();
+        }
+        
+        // 心动时刻表单提交
+        document.getElementById('heartbeatForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const previewImg = document.getElementById('heartbeatPreview');
+            
+            // 保存心动时刻到localStorage
+            const heartbeatData = {
+                id: Date.now(),
+                title: document.getElementById('heartbeatTitle').value,
+                description: document.getElementById('heartbeatDescription').value,
+                image: previewImg.style.display === 'block' ? previewImg.src : '../img/heart1.jpg'
+            };
+            
+            let heartbeats = [];
+            try {
+                heartbeats = JSON.parse(localStorage.getItem('heartbeats')) || [];
+            } catch (error) {
+                console.error('解析心动时刻数据失败:', error);
+                heartbeats = [];
+            }
+            heartbeats.push(heartbeatData);
+            localStorage.setItem('heartbeats', JSON.stringify(heartbeats));
+            alert('心动时刻添加成功！');
+            this.reset();
+            previewImg.style.display = 'none';
+            displayHeartbeats();
+        });
+        
+        // 动态显示心动时刻列表
+        function displayHeartbeats() {
+            let heartbeats = [];
+            try {
+                heartbeats = JSON.parse(localStorage.getItem('heartbeats')) || [];
+            } catch (error) {
+                console.error('解析心动时刻数据失败:', error);
+                heartbeats = [];
+            }
+            const heartbeatList = document.getElementById('heartbeatList');
+            
+            if (heartbeats.length === 0) {
+                heartbeatList.innerHTML = '<p style="text-align: center; color: #999;">暂无心动时刻数据</p>';
+                return;
+            }
+            
+            heartbeatList.innerHTML = '';
+            heartbeats.forEach(heartbeat => {
+                const heartbeatItem = document.createElement('div');
+                heartbeatItem.className = 'item';
+                heartbeatItem.innerHTML = `
+                    <div style="display: flex; align-items: center;">
+                        <img src="${heartbeat.image}" alt="${heartbeat.title}" class="item-image">
+                        <div class="item-content">
+                            <h3>${heartbeat.title}</h3>
+                            <p>${heartbeat.description}</p>
+                        </div>
+                    </div>
+                    <div>
+                        <button class="btn btn-primary" onclick="editHeartbeat(${heartbeat.id})">编辑</button>
+                        <button class="btn btn-danger" onclick="deleteHeartbeat(${heartbeat.id})">删除</button>
+                    </div>
+                `;
+                heartbeatList.appendChild(heartbeatItem);
+            });
+        }
+        
+        // 编辑心动时刻
+        function editHeartbeat(id) {
+            const heartbeats = JSON.parse(localStorage.getItem('heartbeats')) || [];
+            const heartbeat = heartbeats.find(h => h.id === id);
+            if (heartbeat) {
+                document.getElementById('heartbeatTitle').value = heartbeat.title;
+                document.getElementById('heartbeatDescription').value = heartbeat.description;
+                if (heartbeat.image) {
+                    const previewImg = document.getElementById('heartbeatPreview');
+                    previewImg.src = heartbeat.image;
+                    previewImg.style.display = 'block';
+                }
+                deleteHeartbeat(id);
+            }
+        }
+        
+        // 删除心动时刻
+        function deleteHeartbeat(id) {
+            let heartbeats = JSON.parse(localStorage.getItem('heartbeats')) || [];
+            heartbeats = heartbeats.filter(h => h.id !== id);
+            localStorage.setItem('heartbeats', JSON.stringify(heartbeats));
+            displayHeartbeats();
+        }
+    </script>
+</body>
+</html>

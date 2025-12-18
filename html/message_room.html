@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人主页 - 留言书屋</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="message-page">
+        <div class="container">
+            <div class="header">
+                <h1>留言书屋</h1>
+                <p>欢迎留下你的足迹和想法，让我们一起分享生活的美好。</p>
+            </div>
+            
+            <div class="message-section">
+                <!-- 留言板 -->
+                <div class="message-form">
+                    <h2>留言板</h2>
+                    <form>
+                        <div class="form-group">
+                            <label for="name">你的名字</label>
+                            <input type="text" id="name" name="name" placeholder="请输入你的名字">
+                        </div>
+                        <div class="form-group">
+                            <label for="contact">联系方式</label>
+                            <input type="text" id="contact" name="contact" placeholder="请输入你的邮箱或其他联系方式">
+                        </div>
+                        <div class="form-group">
+                            <label for="message">留言内容</label>
+                            <textarea id="message" name="message" placeholder="请留下你的留言..."></textarea>
+                        </div>
+                        <button type="submit" class="submit-btn">提交留言</button>
+                    </form>
+                </div>
+                
+                <!-- 树屋居民登记表 -->
+                <div class="message-form">
+                    <h2>树屋居民登记表</h2>
+                    <form>
+                        <div class="form-group">
+                            <label for="res_name">你的名字</label>
+                            <input type="text" id="res_name" name="res_name" placeholder="请输入你的名字">
+                        </div>
+                        <div class="form-group">
+                            <label for="res_email">邮箱地址</label>
+                            <input type="email" id="res_email" name="res_email" placeholder="请输入你的邮箱">
+                        </div>
+                        <div class="form-group">
+                            <label for="res_age">年龄</label>
+                            <input type="number" id="res_age" name="res_age" placeholder="请输入你的年龄">
+                        </div>
+                        <div class="form-group">
+                            <label for="res_feedback">对网站的反馈</label>
+                            <textarea id="res_feedback" name="res_feedback" placeholder="请留下你对网站的建议或反馈..."></textarea>
+                        </div>
+                        <button type="submit" class="submit-btn">提交注册</button>
+                    </form>
+                </div>
+                
+                <!-- 活动日历 -->
+                <div class="calendar">
+                    <h2>2025年12月活动日历</h2>
+                    <div class="calendar-grid">
+                        <!-- 星期标题 -->
+                        <div class="calendar-day weekend">日</div>
+                        <div class="calendar-day">一</div>
+                        <div class="calendar-day">二</div>
+                        <div class="calendar-day">三</div>
+                        <div class="calendar-day">四</div>
+                        <div class="calendar-day">五</div>
+                        <div class="calendar-day weekend">六</div>
+                        
+                        <!-- 12月日历 -->
+                        <div class="calendar-day">1</div>
+                        <div class="calendar-day">2</div>
+                        <div class="calendar-day">3</div>
+                        <div class="calendar-day">4</div>
+                        <div class="calendar-day">5</div>
+                        <div class="calendar-day">6</div>
+                        <div class="calendar-day weekend">7</div>
+                        
+                        <div class="calendar-day weekend">8</div>
+                        <div class="calendar-day">9</div>
+                        <div class="calendar-day">10</div>
+                        <div class="calendar-day">11</div>
+                        <div class="calendar-day">12</div>
+                        <div class="calendar-day">13</div>
+                        <div class="calendar-day weekend">14</div>
+                        
+                        <div class="calendar-day weekend">15</div>
+                        <div class="calendar-day">16</div>
+                        <div class="calendar-day">17</div>
+                        <div class="calendar-day today">18</div>
+                        <div class="calendar-day">19</div>
+                        <div class="calendar-day">20</div>
+                        <div class="calendar-day weekend">21</div>
+                        
+                        <div class="calendar-day weekend">22</div>
+                        <div class="calendar-day">23</div>
+                        <div class="calendar-day">24</div>
+                        <div class="calendar-day">25</div>
+                        <div class="calendar-day">26</div>
+                        <div class="calendar-day">27</div>
+                        <div class="calendar-day weekend">28</div>
+                        
+                        <div class="calendar-day weekend">29</div>
+                        <div class="calendar-day">30</div>
+                        <div class="calendar-day">31</div>
+                        <div class="calendar-day"></div>
+                        <div class="calendar-day"></div>
+                        <div class="calendar-day"></div>
+                        <div class="calendar-day weekend"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <nav class="bottom-nav">
+        <ul>
+            <li><a href="home.html">首页</a></li>
+            <li><a href="hobbies.html">兴趣爱好</a></li>
+            <li><a href="message_room.html">留言书屋</a></li>
+            <li><a href="learning_log.html">学习日志</a></li>
+        </ul>
+    </nav>
+</body>
+</html>
